@@ -52,4 +52,3 @@ jobs:
         with:
           api-key: ${{ secrets.UNFOLDCI_API_KEY }}
           results-path: test-results/junit-results.xml
-          comment-on-pr: 'true'       
