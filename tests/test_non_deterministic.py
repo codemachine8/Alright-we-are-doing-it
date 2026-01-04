@@ -143,14 +143,20 @@ class TestFeatureFlagRollout:
     def test_specific_user_in_rollout(self):
         """
         FLAKY: Specific user inclusion depends on hash
-        FIX: Don't test specific user, test properties
+        FIX: Mock hash function to ensure deterministic behavior
         """
         FeatureFlags.clear_all()
         FeatureFlags.set_rollout("feature_x", 10)
         
-        # FLAKY: Whether this specific user is included is random
+        # Mock the hash function to ensure deterministic behavior
+        original_hash = FeatureFlags._hash_user
+        FeatureFlags._hash_user = lambda user: 0 if user == "john@example.com" else original_hash(user)
+        
         assert FeatureFlags.is_enabled_for_user("feature_x", "john@example.com"), \
             "Expected john@example.com to be in rollout"
+        
+        # Restore the original hash function
+        FeatureFlags._hash_user = original_hash
 
 
 class TestFloatingPointComparisons:
