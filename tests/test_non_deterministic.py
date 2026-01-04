@@ -429,9 +429,10 @@ class TestHashBasedBehavior:
             bucket_idx = hash(item) % 4
             buckets[bucket_idx].append(item)
         
-        # FLAKY: Distribution depends on hash values
-        assert len(buckets[0]) == 1, \
-            f"Expected 1 item in bucket 0, got {len(buckets[0])}"
+        # FIX: Check that all items are distributed across buckets
+        total_items = sum(len(bucket) for bucket in buckets)
+        assert total_items == len(items), \
+            f"Expected {len(items)} items distributed, got {total_items}"
 
 
 class TestUUIDOrdering:
