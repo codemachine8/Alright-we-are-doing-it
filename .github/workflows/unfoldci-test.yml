@@ -10,9 +10,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-    
     steps:
       - uses: actions/checkout@v4
       
@@ -31,17 +28,30 @@ jobs:
           mkdir -p test-results
           pytest tests/ \
             --junitxml=test-results/junit-results.xml \
-            --randomly-seed=${{ matrix.run }} \
-            -v \
-            || true
+            -v
         env:
           PYTHONPATH: ${{ github.workspace }}/src
+        continue-on-error: true
+      
+      - name: Verify test results file
+        if: always()
+        run: |
+          if [ -f test-results/junit-results.xml ]; then
+            echo "✅ JUnit XML file found"
+            echo "File size: $(wc -c < test-results/junit-results.xml) bytes"
+            echo "First 20 lines:"
+            head -20 test-results/junit-results.xml
+          else
+            echo "❌ JUnit XML file not found!"
+            echo "Contents of test-results directory:"
+            ls -la test-results/ || echo "Directory doesn't exist"
+          fi
       
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-results-${{ matrix.run }}
+          name: test-results
           path: test-results/
           retention-days: 30
       
