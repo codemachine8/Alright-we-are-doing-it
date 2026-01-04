@@ -42,7 +42,8 @@ class TestRandomValueAssertions:
         """
         options = ["A", "B", "C", "D", "E"]
         
-        # FLAKY: Random selection without seed
+        # FIX: Seed the random number generator
+        random.seed(0)
         selection = random.choice(options)
         
         # FLAKY: Expects specific value
