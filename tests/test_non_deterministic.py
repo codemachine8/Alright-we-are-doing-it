@@ -60,10 +60,10 @@ class TestRandomValueAssertions:
                 results["heads"] += 1
             else:
                 results["tails"] += 1
-        
-        # FLAKY: Exact 50/50 split is unlikely
-        assert results["heads"] == 50, \
-            f"Expected 50 heads, got {results['heads']}"
+
+        # FIX: Allow for a range around 50 for statistical tolerance
+        assert 45 <= results["heads"] <= 55, \
+            f"Expected heads count to be around 50, got {results['heads']}"
     
     def test_shuffle_preserves_order(self):
         """
