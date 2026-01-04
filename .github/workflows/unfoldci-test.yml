@@ -61,4 +61,4 @@ jobs:
         uses: UnfoldAI-Labs/UnfoldCI-flaky-autopilot-action@v1
         with:
           api-key: ${{ secrets.UNFOLDCI_API_KEY }}
-          results-path: test-results/junit-results.xml
+          results-path: test-results/junit-results.xml 
