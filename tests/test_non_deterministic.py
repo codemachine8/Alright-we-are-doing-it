@@ -111,11 +111,11 @@ class TestRetryPolicyRandomness:
         FLAKY: Jitter affects delay comparison
         FIX: Compare without jitter or use ranges
         """
-        policy = RetryPolicy(base_delay=0.1, exponential_base=2.0, jitter=True)
-        
+        policy = RetryPolicy(base_delay=0.1, exponential_base=2.0, jitter=False)
+
         delays = [policy.get_delay(i) for i in range(3)]
-        
-        # FLAKY: Jitter can make later delay smaller than earlier
+
+        # FIXED: Removed jitter to ensure delays are strictly increasing
         assert delays[0] < delays[1] < delays[2], \
             f"Delays not strictly increasing: {delays}"
 
