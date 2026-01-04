@@ -453,13 +453,12 @@ class TestUUIDOrdering:
     
     def test_uuid_starts_with(self):
         """
-        FLAKY: UUID prefix is random
-        FIX: Don't test UUID format beyond validation
+        FIX: Validate UUID format instead of specific prefix
         """
         import uuid
-        
+
         generated = str(uuid.uuid4())
-        
-        # FLAKY: UUID is random
-        assert generated.startswith("a"), \
-            f"Expected UUID starting with 'a', got {generated}"
+
+        # Validate UUID format
+        assert len(generated) == 36 and generated.count('-') == 4, \
+            f"Expected valid UUID format, got {generated}"
